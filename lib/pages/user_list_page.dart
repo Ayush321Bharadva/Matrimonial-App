@@ -2,8 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:myproject/pages/add_user.dart';
 import 'package:myproject/database/database.dart';
 import 'package:myproject/models/model.dart';
-import 'package:myproject/pages/user_detail.dart';
 import 'package:myproject/pages/edit_user.dart';
+import 'package:myproject/pages/homepage.dart';
+import 'package:myproject/pages/user_detail.dart';
 
 class UserList extends StatefulWidget {
   const UserList({Key? key}) : super(key: key);
@@ -13,12 +14,9 @@ class UserList extends StatefulWidget {
 }
 
 class _UserListState extends State<UserList> {
-  late final User user;
   final dbHelper = DatabaseProvider.db;
-  late final User updatedUser;
   List<User> userList = [];
-  List<User> filteredUserList = [];
-  TextEditingController searchController = TextEditingController();
+  String filter = '';
 
   @override
   void initState() {
@@ -29,138 +27,138 @@ class _UserListState extends State<UserList> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('User List Page'),
+      appBar: PreferredSize(
+        preferredSize: const Size.fromHeight(60),
+        child: AppBar(
+          shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.vertical(bottom: Radius.circular(25)),
+          ),
+          centerTitle: true,
+          backgroundColor: Colors.green[300],
+          title: const Text(
+            'User List',
+            style: TextStyle(fontWeight: FontWeight.w700, fontSize: 30),
+          ),
+          leading: IconButton(
+            icon: const Icon(Icons.arrow_back),
+            onPressed: () {
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const HomePage(),
+                ),
+              );
+            },
+          ),
+        ),
       ),
       body: Column(
         children: [
-          Container(
-            margin: const EdgeInsets.all(8),
-            padding: const EdgeInsets.symmetric(horizontal: 16),
-            decoration: BoxDecoration(
-              border: Border.all(
-                color: Colors.blue.shade200,
-                width: 2.0,
+          Padding(
+            padding: const EdgeInsets.all(8),
+            child: TextField(
+              onChanged: (val) {
+                setState(() {
+                  filter = val.toLowerCase();
+                });
+              },
+              decoration: InputDecoration(
+                hintText: "search users",
+                prefixIcon: const Icon(Icons.search),
+                border:
+                    OutlineInputBorder(borderRadius: BorderRadius.circular(25)),
               ),
-              borderRadius: BorderRadius.circular(16),
-            ),
-            child: Row(
-              children: [
-                const Icon((Icons.search)),
-                const SizedBox(width: 10),
-                Expanded(
-                  child: TextField(
-                    controller: searchController,
-                    decoration: const InputDecoration(
-                      hintText: 'Search Users',
-                      border: InputBorder.none,
-                    ),
-                    onChanged: _searchUsers,
-                  ),
-                ),
-              ],
             ),
           ),
           Expanded(
-            child: Container(
-              color: Colors.red,
-              margin: const EdgeInsets.all(10),
-              padding: const EdgeInsets.all(10),
-              // height: double.maxFinite,
-              // width: 500,
-              child: ListView.builder(
-                itemCount: filteredUserList.length,
-                itemBuilder: (BuildContext context, int index) {
-                  final user = filteredUserList[index];
-                  return Column(
-                    children: [
-                      Container(
-                        margin: const EdgeInsets.all(8),
-                        padding: const EdgeInsets.all(8),
-                        decoration: BoxDecoration(
-                          border: Border.all(
-                            color: Colors.blue.shade200,
-                            width: 2.0,
-                          ),
-                        ),
-                        child: ListTile(
-                          title: Text(user.name),
-                          subtitle: Text(user.city),
-                          trailing: Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              IconButton(
-                                icon: const Icon(Icons.favorite),
-                                onPressed: () {
-                                  // Handle like button pressed
-                                },
-                              ),
-                              IconButton(
-                                icon: const Icon(Icons.edit),
-                                onPressed: () {
-                                  Navigator.pushReplacement(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) => EditUser(user: user),
-                                    ),
-                                  );
-                                },
-                              ),
-                              IconButton(
-                                icon: const Icon(Icons.delete),
-                                onPressed: () {
-                                  _deleteUser(user.id!);
-                                  Navigator.pushReplacement(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (_) => const UserList(),
-                                    ),
-                                  );
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                    const SnackBar(
-                                      content:
-                                          Text('User Deleted Successfully!!'),
-                                    ),
-                                  );
-                                },
-                              ),
-                            ],
-                          ),
-                          onTap: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => UserDetail(user: user),
-                              ),
-                            );
-                          },
-                        ),
-                      ),
-                    ],
+            child: ListView.builder(
+              itemCount: userList.length,
+              itemBuilder: (BuildContext context, int index) {
+                final user = userList[index];
+                if (!user.name.toLowerCase().contains(filter)) {
+                  return const Center(
+                    child: Text('No Users Currently!!'),
                   );
-                },
-              ),
-            ),
-          ),
-          Center(
-            child: Container(
-              margin: const EdgeInsets.all(10),
-              child: FloatingActionButton.extended(
-                onPressed: () async {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const AddUser(),
+                }
+                return Container(
+                  width: 70,
+                  padding: const EdgeInsets.only(top: 18, bottom: 18),
+                  margin: const EdgeInsets.only(top: 10, left: 10, right: 10),
+                  decoration: BoxDecoration(
+                    color: Colors.green[400],
+                    borderRadius: BorderRadius.circular(30),
+                  ),
+                  child: ListTile(
+                    title: Padding(
+                      padding: const EdgeInsets.only(bottom: 8.0),
+                      child: CardText(user: user),
                     ),
-                  );
-                },
-                backgroundColor: Colors.green,
-                icon: const Icon(Icons.add),
-                label: const Text('Add New User'),
-              ),
+                    subtitle: Text(
+                      user.city,
+                      style: const TextStyle(color: Colors.black, fontSize: 17),
+                    ),
+                    leading: IconButton(
+                      icon: const Icon(Icons.edit),
+                      onPressed: () {
+                        Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => EditUser(
+                              user: user,
+                            ),
+                          ),
+                        );
+                      },
+                    ),
+                    trailing: IconButton(
+                      icon: const Icon(Icons.delete),
+                      onPressed: () {
+                        _deleteUser(user.id!);
+                        Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => const UserList()));
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text('User Deleted Successfully!!'),
+                          ),
+                        );
+                      },
+                    ),
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => UserDetail(
+                            user: user,
+                          ),
+                        ),
+                      );
+                    },
+                  ),
+                );
+              },
             ),
           ),
         ],
+      ),
+      floatingActionButton: SizedBox(
+        height: 100,
+        child: FloatingActionButton(
+          backgroundColor: Colors.green[300],
+          onPressed: () {
+            //navigate to add person page
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (_) => const AddUser(),
+              ),
+            ).then((value) => _getUsers());
+          },
+          child: const Icon(
+            Icons.add,
+          ),
+        ),
       ),
     );
   }
@@ -169,7 +167,6 @@ class _UserListState extends State<UserList> {
     final list = await dbHelper.getAllUsers();
     setState(() {
       userList = list;
-      filteredUserList = list;
     });
   }
 
@@ -179,16 +176,22 @@ class _UserListState extends State<UserList> {
       _deleteUser(id);
     }
   }
+}
 
-  void _searchUsers(String searchQuery) {
-    List<User> results = [];
-    for (var user in userList) {
-      if (user.name.toLowerCase().contains(searchQuery.toLowerCase())) {
-        results.add(user);
-      }
-    }
-    setState(() {
-      filteredUserList = results;
-    });
+class CardText extends StatelessWidget {
+  const CardText({
+    super.key,
+    required this.user,
+  });
+
+  final User user;
+
+  @override
+  Widget build(BuildContext context) {
+    return Text(
+      user.name,
+      style: const TextStyle(
+          fontSize: 22, fontWeight: FontWeight.w700, color: Colors.white),
+    );
   }
 }

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:myproject/pages/favourites_page.dart';
-import 'package:myproject/pages/user_list_2.dart';
 import 'package:myproject/pages/user_list_page.dart';
 
 class Dashboard extends StatelessWidget {
@@ -11,7 +10,6 @@ class Dashboard extends StatelessWidget {
     return Scaffold(
       body: Center(
         child: Flexible(
-          // fit: FlexFit.loose,
           child: GridView.count(
             primary: false,
             padding: const EdgeInsets.all(20),

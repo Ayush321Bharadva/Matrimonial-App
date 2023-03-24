@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:myproject/models/model.dart';
-import 'package:myproject/pages/user_list_2.dart';
 import 'package:myproject/pages/user_list_page.dart';
 import 'package:myproject/database/database.dart';
 
@@ -26,7 +25,7 @@ class _AddUserState extends State<AddUser> {
     return Scaffold(
       // resizeToAvoidBottomInset: false,
       appBar: AppBar(
-        title: Text('Add User'),
+        title: const Text('Add User'),
       ),
       body: SingleChildScrollView(
         child: Padding(
@@ -116,7 +115,7 @@ class _AddUserState extends State<AddUser> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => const UserList2(),
+                          builder: (context) => const UserList(),
                         ),
                       );
                     },

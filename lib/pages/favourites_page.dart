@@ -11,7 +11,7 @@ class FavouritesPage extends StatefulWidget {
 }
 
 class _FavouritesPageState extends State<FavouritesPage> {
-  List<User> _likedUsers = [];
+  final List<User> _likedUsers = [];
 
   @override
   // void initState() {
@@ -37,7 +37,6 @@ class _FavouritesPageState extends State<FavouritesPage> {
                 return ListTile(
                   title: Text(user.name),
                   subtitle: Text(user.city),
-
                 );
               },
             )
