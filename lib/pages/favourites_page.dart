@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:myproject/models/model.dart';
+import 'package:myproject/pages/homepage.dart';
 
 class FavouritesPage extends StatefulWidget {
   final List<User> allUsers;
@@ -27,7 +28,21 @@ class _FavouritesPageState extends State<FavouritesPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Favourites'),
+        shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.vertical(bottom: Radius.circular(25)),
+        ),
+        centerTitle: true,
+        backgroundColor: Colors.green[300],
+        title: const Text(
+          'Liked Users',
+          style: TextStyle(fontWeight: FontWeight.w700, fontSize: 30),
+        ),
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          onPressed: () {
+            Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const HomePage()));
+          },
+        ),
       ),
       body: _likedUsers.isNotEmpty
           ? ListView.builder(

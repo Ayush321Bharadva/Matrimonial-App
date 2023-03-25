@@ -32,7 +32,16 @@ class _EditUserState extends State<EditUser> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Edit User'),
+        shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.vertical(bottom: Radius.circular(25)),
+        ),
+        centerTitle: true,
+        backgroundColor: Colors.green[300],
+        title: const Text(
+          'Edit User',
+          style: TextStyle(fontWeight: FontWeight.w700, fontSize: 30),
+        ),
+        leading: null,
       ),
       body: SingleChildScrollView(
         child: Padding(

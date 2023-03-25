@@ -14,6 +14,8 @@ class UserList extends StatefulWidget {
 }
 
 class _UserListState extends State<UserList> {
+  bool _isFavourite = false;
+
   final dbHelper = DatabaseProvider.db;
   List<User> userList = [];
   String filter = '';
@@ -27,30 +29,40 @@ class _UserListState extends State<UserList> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: PreferredSize(
-        preferredSize: const Size.fromHeight(60),
-        child: AppBar(
-          shape: const RoundedRectangleBorder(
-            borderRadius: BorderRadius.vertical(bottom: Radius.circular(25)),
-          ),
-          centerTitle: true,
-          backgroundColor: Colors.green[300],
-          title: const Text(
-            'User List',
-            style: TextStyle(fontWeight: FontWeight.w700, fontSize: 30),
-          ),
-          leading: IconButton(
-            icon: const Icon(Icons.arrow_back),
-            onPressed: () {
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => const HomePage(),
-                ),
-              );
-            },
-          ),
+      appBar: AppBar(
+        shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.vertical(bottom: Radius.circular(25)),
         ),
+        centerTitle: true,
+        backgroundColor: Colors.green[300],
+        title: const Text(
+          'User List',
+          style: TextStyle(fontWeight: FontWeight.w700, fontSize: 30),
+        ),
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          onPressed: () {
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                builder: (context) => const HomePage(),
+              ),
+            );
+            // Navigator.pop(context);
+          },
+        ),
+        actions: [
+          Container(
+            margin: const EdgeInsets.only(right: 8),
+            child: IconButton(
+              icon: const Icon(Icons.add),
+              onPressed: () {
+                Navigator.pushReplacement(context,
+                    MaterialPageRoute(builder: (context) => const AddUser()));
+              },
+            ),
+          ),
+        ],
       ),
       body: Column(
         children: [
@@ -76,17 +88,15 @@ class _UserListState extends State<UserList> {
               itemBuilder: (BuildContext context, int index) {
                 final user = userList[index];
                 if (!user.name.toLowerCase().contains(filter)) {
-                  return const Center(
-                    child: Text('No Users Currently!!'),
-                  );
+                  return Container();
                 }
                 return Container(
                   width: 70,
-                  padding: const EdgeInsets.only(top: 18, bottom: 18),
-                  margin: const EdgeInsets.only(top: 10, left: 10, right: 10),
+                  padding: const EdgeInsets.only(top: 10, bottom: 10),
+                  margin: const EdgeInsets.all(8.0),
                   decoration: BoxDecoration(
                     color: Colors.green[400],
-                    borderRadius: BorderRadius.circular(30),
+                    borderRadius: BorderRadius.circular(20),
                   ),
                   child: ListTile(
                     title: Padding(
@@ -97,33 +107,86 @@ class _UserListState extends State<UserList> {
                       user.city,
                       style: const TextStyle(color: Colors.black, fontSize: 17),
                     ),
-                    leading: IconButton(
-                      icon: const Icon(Icons.edit),
-                      onPressed: () {
-                        Navigator.pushReplacement(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => EditUser(
-                              user: user,
-                            ),
-                          ),
-                        );
-                      },
-                    ),
-                    trailing: IconButton(
-                      icon: const Icon(Icons.delete),
-                      onPressed: () {
-                        _deleteUser(user.id!);
-                        Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => const UserList()));
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
-                            content: Text('User Deleted Successfully!!'),
-                          ),
-                        );
-                      },
+                    trailing: Wrap(
+                      children: [
+                        IconButton(
+                          icon: Icon(Icons.favorite, color: _isFavourite ? Colors.red : null,),
+                          onPressed: () {
+                            setState(() {
+                              _isFavourite = !_isFavourite;
+                            });
+                          },
+                        ),
+                        IconButton(
+                          icon: const Icon(Icons.edit),
+                          onPressed: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) =>
+                                        EditUser(user: user)));
+                          },
+                        ),
+                        IconButton(
+                          icon: const Icon(Icons.delete),
+                          onPressed: () {
+                            showDialog(
+                              context: context,
+                              builder: (BuildContext context) {
+                                return AlertDialog(
+                                  title: const Text(
+                                    'Delete !',
+                                    textAlign: TextAlign.center,
+                                  ),
+                                  content: const Text(
+                                    'Are you sure you want to delete this user?',
+                                    textAlign: TextAlign.center,
+                                  ),
+                                  actions: [
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceEvenly,
+                                      children: [
+                                        FloatingActionButton.extended(
+                                          label: const Text('Cancel'),
+                                          backgroundColor: Colors.blueGrey,
+                                          onPressed: () {
+                                            Navigator.of(context).pop();
+                                          },
+                                        ),
+                                        FloatingActionButton.extended(
+                                          label: const Text('Delete'),
+                                          backgroundColor: Colors.blueGrey,
+                                          onPressed: () {
+                                            _deleteUser(user.id!);
+                                            Navigator.pushReplacement(
+                                                context,
+                                                MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        const UserList()));
+                                            ScaffoldMessenger.of(context)
+                                                .showSnackBar(
+                                              const SnackBar(
+                                                content: Text(
+                                                  'User Deleted Successfully!!',
+                                                ),
+                                                backgroundColor:
+                                                    Colors.blueGrey,
+                                                behavior:
+                                                    SnackBarBehavior.floating,
+                                              ),
+                                            );
+                                          },
+                                        ),
+                                      ],
+                                    ),
+                                  ],
+                                );
+                              },
+                            );
+                          },
+                        ),
+                      ],
                     ),
                     onTap: () {
                       Navigator.push(
@@ -142,24 +205,6 @@ class _UserListState extends State<UserList> {
           ),
         ],
       ),
-      floatingActionButton: SizedBox(
-        height: 100,
-        child: FloatingActionButton(
-          backgroundColor: Colors.green[300],
-          onPressed: () {
-            //navigate to add person page
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (_) => const AddUser(),
-              ),
-            ).then((value) => _getUsers());
-          },
-          child: const Icon(
-            Icons.add,
-          ),
-        ),
-      ),
     );
   }
 
@@ -176,6 +221,18 @@ class _UserListState extends State<UserList> {
       _deleteUser(id);
     }
   }
+
+// void _searchUsers(String searchQuery) {
+//   List<User> results = [];
+//   for (var user in userList) {
+//     if (user.name.toLowerCase().contains(searchQuery.toLowerCase())) {
+//       results.add(user);
+//     }
+//   }
+//   setState(() {
+//     filteredUserList = results;
+//   });
+// }
 }
 
 class CardText extends StatelessWidget {

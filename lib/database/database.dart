@@ -29,26 +29,6 @@ class DatabaseProvider {
             "city TEXT,"
             "description TEXT"
             ")");
-
-        await db.execute(
-          "INSERT INTO USER ('id', 'name', 'gender', 'city', 'description') values (?,?,?,?,?)",
-          [1, 'Ramesh', 'Male', 'Rajkot', 'Nothing'],
-        );
-
-        await db.execute(
-          "INSERT INTO USER ('id', 'name', 'gender', 'city', 'description') values (?,?,?,?,?)",
-          [2, 'Sureah', 'Male', 'Jamnagar', 'Human'],
-        );
-
-        await db.execute(
-          "INSERT INTO USER ('id', 'name', 'gender', 'city', 'description') values (?,?,?,?,?)",
-          [3, 'Kajal', 'Female', 'Rajkot', 'Something'],
-        );
-
-        await db.execute(
-          "INSERT INTO USER ('id', 'name', 'gender', 'city', 'description') values (?,?,?,?,?)",
-          [4, 'Priya', 'Female', 'Jamnagar', 'Human'],
-        );
       },
     );
   }

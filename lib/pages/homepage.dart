@@ -4,6 +4,7 @@ import 'package:myproject/pages/about_us.dart';
 import 'package:myproject/pages/add_user.dart';
 import 'package:myproject/pages/dashboard.dart';
 import 'package:myproject/pages/favourites_page.dart';
+import 'package:myproject/pages/user_list_page.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -23,6 +24,8 @@ class _HomePageState extends State<HomePage> {
       container = const Dashboard();
     } else if (currentPage == DrawerSectons.adduser) {
       container = const AddUser();
+    } else if(currentPage == DrawerSectons.allUsers){
+      container = const UserList();
     } else if (currentPage == DrawerSectons.favourites) {
       container = const FavouritesPage(allUsers: [],);
     } else if (currentPage == DrawerSectons.aboutUs) {
@@ -58,7 +61,9 @@ class _HomePageState extends State<HomePage> {
               currentPage == DrawerSectons.dashboard ? true : false),
           MenuItem(2, 'Add User', Icons.add_circle,
               currentPage == DrawerSectons.adduser ? true : false),
-          MenuItem(3, 'Favourites', Icons.favorite,
+          MenuItem(3, 'All Users', Icons.supervised_user_circle_sharp,
+              currentPage == DrawerSectons.allUsers ? true : false),
+          MenuItem(4, 'Favourites', Icons.favorite,
               currentPage == DrawerSectons.favourites ? true : false),
           const Divider(
             thickness: 1.5,
@@ -84,8 +89,10 @@ class _HomePageState extends State<HomePage> {
             } else if (id == 2) {
               currentPage = DrawerSectons.adduser;
             } else if (id == 3) {
-              currentPage = DrawerSectons.favourites;
+              currentPage = DrawerSectons.allUsers;
             } else if (id == 4) {
+              currentPage = DrawerSectons.favourites;
+            } else if (id == 5) {
               currentPage = DrawerSectons.aboutUs;
             }
           });
@@ -121,6 +128,7 @@ class _HomePageState extends State<HomePage> {
 enum DrawerSectons {
   dashboard,
   adduser,
+  allUsers,
   favourites,
   aboutUs,
 }

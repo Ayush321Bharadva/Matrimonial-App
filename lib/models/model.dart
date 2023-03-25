@@ -3,12 +3,20 @@ class User {
   final String name;
   final String gender;
   final String city;
+
   // final String dob;
   // final String religion;
   // final String caste;
   // final bool isLiked;
   final String description;
-  static final columns = ["id", "name", "gender", "city", "description", "isLiked"];
+  static final columns = [
+    "id",
+    "name",
+    "gender",
+    "city",
+    "description",
+    // "isLiked"
+  ];
 
   User({
     this.id,
@@ -19,14 +27,14 @@ class User {
     // this.isLiked = false,
   });
 
-  User copyWith(
-      {int? id,
-      String? name,
-      String? gender,
-      String? city,
-      String? description,
-      bool? isLiked,
-      }) {
+  User copyWith({
+    int? id,
+    String? name,
+    String? gender,
+    String? city,
+    String? description,
+    // bool? isLiked,
+  }) {
     return User(
       id: id ?? this.id,
       name: name ?? this.name,
