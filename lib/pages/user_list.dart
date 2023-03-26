@@ -110,7 +110,10 @@ class _UserListState extends State<UserList> {
                     trailing: Wrap(
                       children: [
                         IconButton(
-                          icon: Icon(Icons.favorite, color: _isFavourite ? Colors.red : null,),
+                          icon: Icon(
+                            Icons.favorite,
+                            color: _isFavourite ? Colors.red : null,
+                          ),
                           onPressed: () {
                             setState(() {
                               _isFavourite = !_isFavourite;

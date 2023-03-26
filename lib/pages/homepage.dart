@@ -4,7 +4,7 @@ import 'package:myproject/pages/about_us.dart';
 import 'package:myproject/pages/add_user.dart';
 import 'package:myproject/pages/dashboard.dart';
 import 'package:myproject/pages/favourites_page.dart';
-import 'package:myproject/pages/user_list_page.dart';
+import 'package:myproject/pages/user_list.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);

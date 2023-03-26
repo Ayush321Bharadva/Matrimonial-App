@@ -37,7 +37,7 @@ class DatabaseProvider {
   Future<List<User>> getAllUsers() async {
     final db = await database;
     List<Map> results =
-        await db.query("User", columns: User.columns, orderBy: "id ASC");
+    await db.query("User", columns: User.columns, orderBy: "id ASC");
     List<User> users = [];
     for (var result in results) {
       User user = User.fromMap(result as Map<String, dynamic>);
@@ -57,7 +57,7 @@ class DatabaseProvider {
   Future<int> insert(User user) async {
     final db = await database;
     var maxIdResult =
-        await db.rawQuery("SELECT MAX(id+1) as last_inserted_id FROM User");
+    await db.rawQuery("SELECT MAX(id+1) as last_inserted_id FROM User");
     var id = maxIdResult.first["last_inserted_id"];
     var result = await db.rawInsert(
       "INSERT into User (id, name, gender, city, description) VALUES (?,?,?,?,?)",

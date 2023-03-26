@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:myproject/database/database.dart';
 import 'package:myproject/models/model.dart';
-import 'package:myproject/pages/user_list_page.dart';
+import 'package:myproject/pages/user_list.dart';
 
 class EditUser extends StatefulWidget {
   final User user;

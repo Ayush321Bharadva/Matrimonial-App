@@ -46,18 +46,18 @@ class _FavouritesPageState extends State<FavouritesPage> {
       ),
       body: _likedUsers.isNotEmpty
           ? ListView.builder(
-              itemCount: _likedUsers.length,
-              itemBuilder: (context, index) {
-                User user = _likedUsers[index];
-                return ListTile(
-                  title: Text(user.name),
-                  subtitle: Text(user.city),
-                );
-              },
-            )
+        itemCount: _likedUsers.length,
+        itemBuilder: (context, index) {
+          User user = _likedUsers[index];
+          return ListTile(
+            title: Text(user.name),
+            subtitle: Text(user.city),
+          );
+        },
+      )
           : const Center(
-              child: Text('No any Favourite Users!!'),
-            ),
+        child: Text('No any Favourite Users!!'),
+      ),
     );
   }
 }

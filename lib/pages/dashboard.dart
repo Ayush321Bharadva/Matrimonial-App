@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:myproject/pages/favourites_page.dart';
-import 'package:myproject/pages/user_list_page.dart';
+import 'package:myproject/pages/user_list.dart';
 
 class Dashboard extends StatelessWidget {
   const Dashboard({Key? key}) : super(key: key);
@@ -67,23 +67,29 @@ class Dashboard extends StatelessWidget {
                   child: const Text('Favourite Users'),
                 ),
               ),
-              Container(
-                alignment: Alignment.center,
-                padding: const EdgeInsets.all(8),
-                decoration: BoxDecoration(
-                  color: Colors.green[300],
-                  borderRadius: BorderRadius.circular(10),
+              GestureDetector(
+                onTap: (){},
+                child: Container(
+                  alignment: Alignment.center,
+                  padding: const EdgeInsets.all(8),
+                  decoration: BoxDecoration(
+                    color: Colors.green[300],
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: const Text('Insert User in API'),
                 ),
-                child: const Text('Box 3'),
               ),
-              Container(
-                alignment: Alignment.center,
-                padding: const EdgeInsets.all(8),
-                decoration: BoxDecoration(
-                  color: Colors.green[200],
-                  borderRadius: BorderRadius.circular(10),
+              GestureDetector(
+                onTap: (){},
+                child: Container(
+                  alignment: Alignment.center,
+                  padding: const EdgeInsets.all(8),
+                  decoration: BoxDecoration(
+                    color: Colors.green[200],
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: const Text('CRUD in API'),
                 ),
-                child: const Text('Box 4'),
               ),
             ],
           ),
