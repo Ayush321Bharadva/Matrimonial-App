@@ -89,7 +89,7 @@ class InsertUserState extends State<InsertUser> {
     map["City"] = cityController.text;
 
     var response = await http.post(
-        Uri.parse("https://62da4a135d893b27b2f4cdf5.mockapi.io/Faculty"),
+        Uri.parse("https://62dbcd92d1d97b9e0c543e75.mockapi.io/users"),
         body: map);
   }
 
@@ -101,7 +101,7 @@ class InsertUserState extends State<InsertUser> {
     map["Gender"] = genderController.text;
 
     var response = await http.put(
-        Uri.parse("https://62da4a135d893b27b2f4cdf5.mockapi.io/Faculty/$id"),
+        Uri.parse("https://62dbcd92d1d97b9e0c543e75.mockapi.io/users/$id"),
         body: map);
   }
 }

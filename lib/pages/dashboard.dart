@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:myproject/pages/favourites_page.dart';
+import 'package:myproject/models/model.dart';
+import 'package:myproject/pages/api_insert_users.dart';
+import 'package:myproject/pages/crud_api.dart';
 import 'package:myproject/pages/user_list.dart';
 
 class Dashboard extends StatelessWidget {
-  const Dashboard({Key? key}) : super(key: key);
+  final List<User> allUsers;
+
+  const Dashboard({Key? key, required this.allUsers}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -49,14 +53,15 @@ class Dashboard extends StatelessWidget {
                 ),
               ),
               GestureDetector(
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const FavouritesPage(allUsers: [],),
-                    ),
-                  );
-                },
+                // onTap: () {
+                //   final likedUsers = allUsers.where((user) => user.isLiked).toList();
+                //   Navigator.push(
+                //     context,
+                //     MaterialPageRoute(
+                //       builder: (context) => LikedUsers(userList: likedUsers,),
+                //     ),
+                //   );
+                // },
                 child: Container(
                   alignment: Alignment.center,
                   padding: const EdgeInsets.all(8),
@@ -68,7 +73,12 @@ class Dashboard extends StatelessWidget {
                 ),
               ),
               GestureDetector(
-                onTap: (){},
+                onTap: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => InsertUser(null)));
+                },
                 child: Container(
                   alignment: Alignment.center,
                   padding: const EdgeInsets.all(8),
@@ -76,11 +86,14 @@ class Dashboard extends StatelessWidget {
                     color: Colors.green[300],
                     borderRadius: BorderRadius.circular(10),
                   ),
-                  child: const Text('Insert User in API'),
+                  child: const Text('API (Insert)'),
                 ),
               ),
               GestureDetector(
-                onTap: (){},
+                onTap: () {
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (context) => const CrudApi()));
+                },
                 child: Container(
                   alignment: Alignment.center,
                   padding: const EdgeInsets.all(8),
@@ -88,7 +101,7 @@ class Dashboard extends StatelessWidget {
                     color: Colors.green[200],
                     borderRadius: BorderRadius.circular(10),
                   ),
-                  child: const Text('CRUD in API'),
+                  child: const Center(child: Text('API (all Users)')),
                 ),
               ),
             ],

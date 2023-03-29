@@ -21,13 +21,13 @@ class _HomePageState extends State<HomePage> {
     var container;
 
     if (currentPage == DrawerSectons.dashboard) {
-      container = const Dashboard();
+      container = const Dashboard(allUsers: [],);
     } else if (currentPage == DrawerSectons.adduser) {
       container = const AddUser();
     } else if(currentPage == DrawerSectons.allUsers){
       container = const UserList();
     } else if (currentPage == DrawerSectons.favourites) {
-      container = const FavouritesPage(allUsers: [],);
+      container = LikedUsers(userList: [],);
     } else if (currentPage == DrawerSectons.aboutUs) {
       container = const AboutUs();
     }

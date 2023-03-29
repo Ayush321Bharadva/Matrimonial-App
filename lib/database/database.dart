@@ -27,17 +27,23 @@ class DatabaseProvider {
             "name TEXT,"
             "gender TEXT,"
             "city TEXT,"
-            "description TEXT"
+            "description TEXT,"
+            "isLiked INTEGER"
             ")");
       },
     );
   }
 
   // get all users method
-  Future<List<User>> getAllUsers() async {
+  Future<List<User>> getAllUsers({bool? isLiked}) async {
     final db = await database;
-    List<Map> results =
-    await db.query("User", columns: User.columns, orderBy: "id ASC");
+    List<Map> results ;
+    if(isLiked != null && isLiked){
+      results =  await db.query("User", columns: User.columns,where: "isLiked = ?",whereArgs: [1], orderBy: "id ASC");
+    } else {
+      results = await db.query("User", columns: User.columns, orderBy: "id ASC");
+    }
+    // await db.query("User", columns: User.columns, orderBy: "id ASC");
     List<User> users = [];
     for (var result in results) {
       User user = User.fromMap(result as Map<String, dynamic>);
@@ -49,7 +55,7 @@ class DatabaseProvider {
   //get user by id
   Future<User?> getUserById(int id) async {
     final db = await database;
-    var result = await db.query("User", where: "id = ", whereArgs: [id]);
+    var result = await db.query("User", where: "id = ?", whereArgs: [id]);
     return result.isNotEmpty ? User.fromMap(result.first) : null;
   }
 
@@ -60,8 +66,8 @@ class DatabaseProvider {
     await db.rawQuery("SELECT MAX(id+1) as last_inserted_id FROM User");
     var id = maxIdResult.first["last_inserted_id"];
     var result = await db.rawInsert(
-      "INSERT into User (id, name, gender, city, description) VALUES (?,?,?,?,?)",
-      [id, user.name, user.gender, user.city, user.description],
+      "INSERT into User (id, name, gender, city, description, isLiked) VALUES (?,?,?,?,?,?)",
+      [id, user.name, user.gender, user.city, user.description, user.isLiked ? 1 : 0],
     );
     return result;
   }
@@ -78,5 +84,13 @@ class DatabaseProvider {
   delete(int id) async {
     final db = await database;
     db.delete("User", where: "id = ?", whereArgs: [id]);
+  }
+
+  //liked user
+  Future<int> likedUser(User user) async {
+    final db = await database;
+    var result = await db.update("User", user.toMap(), where: "id = ?", whereArgs: [user.id]);
+    // db.update("User", user.toMap(), where: "id = ?", whereArgs: [user.id]);
+    return result;
   }
 }

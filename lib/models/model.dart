@@ -3,11 +3,7 @@ class User {
   final String name;
   final String gender;
   final String city;
-
-  // final String dob;
-  // final String religion;
-  // final String caste;
-  // final bool isLiked;
+  bool isLiked;
   final String description;
   static final columns = [
     "id",
@@ -15,7 +11,7 @@ class User {
     "gender",
     "city",
     "description",
-    // "isLiked"
+    "isLiked"
   ];
 
   User({
@@ -24,7 +20,7 @@ class User {
     required this.gender,
     required this.city,
     required this.description,
-    // this.isLiked = false,
+    this.isLiked = false,
   });
 
   User copyWith({
@@ -53,7 +49,7 @@ class User {
       'gender': gender,
       'city': city,
       'description': description,
-      // 'isLiked' : isLiked ? 1 : 0,
+      'isLiked' : isLiked ? 1 : 0,
     };
   }
 
@@ -65,7 +61,7 @@ class User {
       gender: data['gender'],
       city: data['city'],
       description: data['description'],
-      // isLiked: data['isLiked'] == 1,
+      isLiked: data['isLiked'].toString() == "0" ? false : true,
     );
   }
 }

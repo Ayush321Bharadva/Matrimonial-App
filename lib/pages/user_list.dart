@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:myproject/pages/add_user.dart';
 import 'package:myproject/database/database.dart';
 import 'package:myproject/models/model.dart';
 import 'package:myproject/pages/edit_user.dart';
+import 'package:myproject/pages/favourites_page.dart';
 import 'package:myproject/pages/homepage.dart';
 import 'package:myproject/pages/user_detail.dart';
 
@@ -14,16 +14,17 @@ class UserList extends StatefulWidget {
 }
 
 class _UserListState extends State<UserList> {
-  bool _isFavourite = false;
-
   final dbHelper = DatabaseProvider.db;
   List<User> userList = [];
   String filter = '';
+  late List<User> users;
+  late List<User> likedUsers;
 
   @override
   void initState() {
     super.initState();
     _getUsers();
+    likedUsers = [];
   }
 
   @override
@@ -55,10 +56,18 @@ class _UserListState extends State<UserList> {
           Container(
             margin: const EdgeInsets.only(right: 8),
             child: IconButton(
-              icon: const Icon(Icons.add),
+              icon: const Icon(Icons.favorite_border),
               onPressed: () {
-                Navigator.pushReplacement(context,
-                    MaterialPageRoute(builder: (context) => const AddUser()));
+                final likedUsers =
+                    userList.where((user) => user.isLiked).toList();
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => LikedUsers(
+                      userList: likedUsers,
+                    ),
+                  ),
+                );
               },
             ),
           ),
@@ -112,12 +121,18 @@ class _UserListState extends State<UserList> {
                         IconButton(
                           icon: Icon(
                             Icons.favorite,
-                            color: _isFavourite ? Colors.red : null,
+                            color: user.isLiked ? Colors.red : null,
                           ),
                           onPressed: () {
                             setState(() {
-                              _isFavourite = !_isFavourite;
+                              user.isLiked = !user.isLiked;
+                              dbHelper.likedUser(user);
                             });
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                content: Text('Saved to Liked'),
+                              ),
+                            );
                           },
                         ),
                         IconButton(
@@ -214,7 +229,8 @@ class _UserListState extends State<UserList> {
   Future<void> _getUsers() async {
     final list = await dbHelper.getAllUsers();
     setState(() {
-      userList = list;
+      userList.clear();
+      userList.addAll(list);
     });
   }
 
@@ -224,18 +240,6 @@ class _UserListState extends State<UserList> {
       _deleteUser(id);
     }
   }
-
-// void _searchUsers(String searchQuery) {
-//   List<User> results = [];
-//   for (var user in userList) {
-//     if (user.name.toLowerCase().contains(searchQuery.toLowerCase())) {
-//       results.add(user);
-//     }
-//   }
-//   setState(() {
-//     filteredUserList = results;
-//   });
-// }
 }
 
 class CardText extends StatelessWidget {

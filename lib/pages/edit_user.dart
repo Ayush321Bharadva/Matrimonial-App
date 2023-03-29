@@ -15,17 +15,17 @@ class EditUser extends StatefulWidget {
 class _EditUserState extends State<EditUser> {
   final _formKey = GlobalKey<FormState>();
   late String _name;
-  late String _gender;
   late String _city;
   late String _description;
+  String _genderValue = '';
 
   @override
   void initState() {
     super.initState();
     _name = widget.user.name;
-    _gender = widget.user.gender;
     _city = widget.user.city;
     _description = widget.user.description;
+    _genderValue = widget.user.gender;
   }
 
   @override
@@ -67,18 +67,52 @@ class _EditUserState extends State<EditUser> {
                 const SizedBox(
                   height: 16,
                 ),
-                TextFormField(
-                  initialValue: _gender,
-                  decoration: const InputDecoration(labelText: 'Gender',
-                    border: OutlineInputBorder(),
+                Container(
+                  decoration: BoxDecoration(
+                    border: Border.all(width: 1.0),
                   ),
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Please enter gender';
-                    }
-                    return null;
-                  },
-                  onSaved: (value) => _gender = value!,
+                  child: Wrap(
+                    children: [
+                      const Padding(
+                        padding: EdgeInsets.all(8.0),
+                        child: Text(
+                          'Gender',
+                          style: TextStyle(
+                            // fontWeight: FontWeight.bold,
+                            fontSize: 16,
+                          ),
+                        ),
+                      ),
+                      Row(
+                        children: [
+                          Expanded(
+                            child: RadioListTile<String>(
+                              title: const Text('Male'),
+                              value: 'Male',
+                              groupValue: _genderValue,
+                              onChanged: (value) {
+                                setState(() {
+                                  _genderValue = value!;
+                                });
+                              },
+                            ),
+                          ),
+                          Expanded(
+                            child: RadioListTile<String>(
+                              title: const Text('Female'),
+                              value: 'Female',
+                              groupValue: _genderValue,
+                              onChanged: (value) {
+                                setState(() {
+                                  _genderValue = value!;
+                                });
+                              },
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
                 ),
                 const SizedBox(
                   height: 16,
@@ -138,7 +172,7 @@ class _EditUserState extends State<EditUser> {
 
   void _updateUser() {
     final updatedUser = widget.user.copyWith(
-        name: _name, city: _city, gender: _gender, description: _description);
+        name: _name, city: _city, gender: _genderValue, description: _description);
     DatabaseProvider.db.update(updatedUser);
   }
 }

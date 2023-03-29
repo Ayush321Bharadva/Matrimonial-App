@@ -2,6 +2,8 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:myproject/pages/api_insert_users.dart';
+import 'package:myproject/pages/api_user_detail.dart';
+
 
 
 class CrudApi extends StatefulWidget {
@@ -17,7 +19,7 @@ class _CrudApiState extends State<CrudApi> {
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
-          title: const Text("Api Demo"),
+          title: const Text("Api Users"),
           actions: [
             Padding(
               padding: const EdgeInsets.all(8.0),
@@ -45,11 +47,7 @@ class _CrudApiState extends State<CrudApi> {
                 itemBuilder: (context, index) {
                   return InkWell(
                     onTap: () {
-                      Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) {
-                          return InsertUser(jsonDecode(
-                              snapshot.data!.body.toString())[index]);
-                        },
+                      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const APIUserDetail()
                       )).then((value) {
                         if (value == true) {
                           setState(() {});
@@ -101,13 +99,20 @@ class _CrudApiState extends State<CrudApi> {
 
   Future<http.Response> getData() async {
     var response = await http
-        .get(Uri.parse("https://62da4a135d893b27b2f4cdf5.mockapi.io/Faculty"));
+        .get(Uri.parse("https://62dbcd92d1d97b9e0c543e75.mockapi.io/users"));
+    return response;
+  }
+
+  Future<http.Response> getDataById(id) async {
+    // var id;
+    var response = await http
+        .get(Uri.parse("https://62dbcd92d1d97b9e0c543e75.mockapi.io/users/$id"));
     return response;
   }
 
   Future<http.Response> deleteUser(id) async {
     var response = await http.delete(
-      Uri.parse("https://62da4a135d893b27b2f4cdf5.mockapi.io/Faculty/$id"),
+      Uri.parse("https://62dbcd92d1d97b9e0c543e75.mockapi.io/users/$id"),
     );
     return response;
   }

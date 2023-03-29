@@ -13,7 +13,7 @@ class AddUser extends StatefulWidget {
 
 class _AddUserState extends State<AddUser> {
   final TextEditingController _nameController = TextEditingController();
-  final TextEditingController _genderController = TextEditingController();
+  // final TextEditingController _genderController = TextEditingController();
   final TextEditingController _cityController = TextEditingController();
   final TextEditingController _descriptionController = TextEditingController();
   String _genderValue = '';
@@ -147,14 +147,16 @@ class _AddUserState extends State<AddUser> {
                         ScaffoldMessenger.of(context).showSnackBar(
                           const SnackBar(
                             content: Text('User Added Successfully!!'),
-                            duration: Duration(seconds: 2),
+                            duration: Duration(seconds: 1),
                           ),
                         );
                         _nameController.clear();
-                        //_genderController.clear();
+                        // _genderController.clear();
+                        _genderValue.trim();
                         _cityController.clear();
                         _descriptionController.clear();
                       }
+                      Navigator.of(context).pop();
                     },
                     backgroundColor: Colors.green,
                     icon: const Icon(Icons.add),
